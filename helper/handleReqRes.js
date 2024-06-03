@@ -27,14 +27,13 @@ helper.handleReqRes = (req, res) => {
 
     const chosenHandler = route[trimPath] ? route[trimPath] : notFoundHandler;
 
-    chosenHandler(requestProperties, (statusCode, payload) => {
-        statusCode = typeof(statusCode) === 'number' ? statusCode : 500;
-        payload = typeof(payload) === 'object' ? payload : {};
+    chosenHandler(requestProperties, (statsCode, payload) => {
+        statsCode = typeof(statsCode) === 'number' ? statsCode : 500;
+        payload = typeof(payload) === 'object' ? payload : {}
+
         const payloadString = JSON.stringify(payload)
-
-        res.writeHead(statusCode)
+        res.writeHead(statsCode)
         res.end(payloadString)
-
     })
 
     req.on('data', (buffer) => {
