@@ -11,7 +11,10 @@ app.config = {
     port: 3000
 }
 
-lib.create('test', 'newFile', { 'name': 'shanto' }, (err) => {
+// lib.create('test', 'newFile', { 'name': 'shanto' }, (err) => {
+//     console.log(err);
+// })
+lib.update('test', 'newFile', { 'name': 'panto' }, (err) => {
     console.log(err);
 })
 
