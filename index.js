@@ -11,7 +11,7 @@ app.config = {
     port: 3000
 }
 
-// lib.create('test', 'newFile', { 'name': 'shanto' }, (err) => {
+// lib.create('user', 'newFile', { 'name': 'shanto' }, (err) => {
 //         console.log(err);
 //     })
 // lib.update('test', 'newFile', { 'name': 'panto' }, (err) => {
@@ -20,9 +20,9 @@ app.config = {
 // lib.read('test', 'newFile', (err, data) => {
 //     console.log(err, data);
 // })
-lib.delete('test', 'newFile', (err) => {
-    console.log(err);
-})
+// lib.delete('test', 'newFile', (err) => {
+//     console.log(err);
+// })
 
 app.createServer = () => {
     const server = http.createServer(app.handleReqRes);

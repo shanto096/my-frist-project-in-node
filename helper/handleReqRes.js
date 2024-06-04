@@ -2,6 +2,7 @@ const url = require('url')
 const { StringDecoder } = require('string_decoder')
 const route = require('../route')
 const { notFoundHandler } = require('../handler/routeHandler/notFoundHandler')
+const { jsonParse } = require('../helper/utilities')
 
 const helper = {}
 helper.handleReqRes = (req, res) => {
@@ -27,23 +28,25 @@ helper.handleReqRes = (req, res) => {
 
     const chosenHandler = route[trimPath] ? route[trimPath] : notFoundHandler;
 
-    chosenHandler(requestProperties, (statsCode, payload) => {
-        statsCode = typeof(statsCode) === 'number' ? statsCode : 500;
-        payload = typeof(payload) === 'object' ? payload : {}
 
-        const payloadString = JSON.stringify(payload)
-        res.writeHead(statsCode)
-        res.end(payloadString)
-    })
 
     req.on('data', (buffer) => {
         realData += decoder.write(buffer)
     })
     req.on('end', () => {
         realData += decoder.end()
+        requestProperties.body = jsonParse(realData)
+            // console.log(requestProperties.body);
+        chosenHandler(requestProperties, (statsCode, payload) => {
+                statsCode = typeof(statsCode) === 'number' ? statsCode : 500;
+                payload = typeof(payload) === 'object' ? payload : {}
 
-        console.log(realData);
-        // Response handle>>>>>>>>>
+                const payloadString = JSON.stringify(payload)
+                res.setHeader('Content-type', 'application/json')
+                res.writeHead(statsCode)
+                res.end(payloadString)
+            })
+            // Response handle>>>>>>>>>
         res.end('ami achi tomar sathe')
     })
 
