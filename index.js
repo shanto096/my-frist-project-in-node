@@ -12,9 +12,15 @@ app.config = {
 }
 
 // lib.create('test', 'newFile', { 'name': 'shanto' }, (err) => {
+//         console.log(err);
+//     })
+// lib.update('test', 'newFile', { 'name': 'panto' }, (err) => {
 //     console.log(err);
 // })
-lib.update('test', 'newFile', { 'name': 'panto' }, (err) => {
+// lib.read('test', 'newFile', (err, data) => {
+//     console.log(err, data);
+// })
+lib.delete('test', 'newFile', (err) => {
     console.log(err);
 })
 
