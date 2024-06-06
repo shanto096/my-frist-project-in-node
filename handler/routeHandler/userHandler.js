@@ -1,5 +1,6 @@
 const lib = require('../../lib/data')
 const { hash } = require('../../helper/utilities')
+const { jsonParse } = require('../../helper/utilities')
 
 
 const handler = {}
@@ -65,8 +66,30 @@ handler._user.post = (requestProperties, callBack) => {
 
 }
 handler._user.get = (requestProperties, callBack) => {
+    const phone = requestProperties.queryString.phone;
 
-}
+    if (phone) {
+        lib.read('user', phone, (u, err) => {
+            const user = {...jsonParse(u) };
+
+            if (!err && u) {
+                delete user.password;
+                callBack(200, user);
+            } else {
+
+                callBack(404, {
+                    message: "requested user was not found"
+                });
+            }
+        });
+    } else {
+        callBack(404, {
+            message: "requested user was not found"
+        });
+    }
+};
+
+
 handler._user.put = (requestProperties, callBack) => {
 
 }
