@@ -7,7 +7,7 @@ const handler = {}
 handler.userHandler = (requestProperties, callBack) => {
     const acceptedMethod = ['get', 'post', 'put', 'delete']
     if (acceptedMethod.indexOf(requestProperties.method) > -1) {
-        handler.__user[requestProperties.method](requestProperties, callBack)
+        handler._user[requestProperties.method](requestProperties, callBack)
     } else {
         callBack(405)
     }
@@ -15,17 +15,17 @@ handler.userHandler = (requestProperties, callBack) => {
 }
 
 //request handling ....................
-handler.__user = {}
-handler.__user.post = (requestProperties, callBack) => {
-    console.log(requestProperties.body);
-    const firstName = typeof(requestProperties.body.firstName === 'string' && requestProperties.body.firstName.trim().length > 0 ? requestProperties.body.firstName : null)
-    const lastName = typeof(requestProperties.body.lastName === 'string' && requestProperties.body.lastName.trim().length > 0 ? requestProperties.body.lastName : null)
-    const phone = typeof(requestProperties.body.phone === 'string' && requestProperties.body.phone.trim().length > 0 ? requestProperties.body.phone : null)
-    const passwords = typeof(requestProperties.body.passwords === 'string' && requestProperties.body.passwords.trim().length > 0 ? requestProperties.body.passwords : null)
-    const t = typeof(requestProperties.body.t === 'boolean' && requestProperties.body.t.trim().length > 0 ? requestProperties.body.t : null)
+handler._user = {}
+handler._user.post = (requestProperties, callBack) => {
+
+    const firstName = typeof(requestProperties.body.firstName === 'string') && requestProperties.body.firstName.trim().length > 0 ? requestProperties.body.firstName : false
+    const lastName = typeof(requestProperties.body.lastName === 'string') && requestProperties.body.lastName.trim().length > 0 ? requestProperties.body.lastName : false
+    const phone = typeof(requestProperties.body.phone === 'string') && requestProperties.body.phone.trim().length > 0 ? requestProperties.body.phone : false
+    const passwords = typeof(requestProperties.body.passwords === 'string') && requestProperties.body.passwords.trim().length > 0 ? requestProperties.body.passwords : false
+    const tomes = requestProperties.body.tomes
 
 
-    if (firstName && lastName && phone && passwords && t) {
+    if (firstName && lastName && phone && passwords && tomes) {
         lib.read('user', phone, (err1) => {
             if (err1) {
                 let userData = {
@@ -33,11 +33,13 @@ handler.__user.post = (requestProperties, callBack) => {
                     lastName,
                     phone,
                     password: hash(passwords),
-                    t
-
+                    tomes
                 }
+
+
+
                 lib.create('user', phone, userData, (err2) => {
-                    if (err2) {
+                    if (!err2) {
                         callBack(200, {
                             message: 'created successfully'
                         })
@@ -62,13 +64,13 @@ handler.__user.post = (requestProperties, callBack) => {
     }
 
 }
-handler.__user.get = (requestProperties, callBack) => {
+handler._user.get = (requestProperties, callBack) => {
 
 }
-handler.__user.put = (requestProperties, callBack) => {
+handler._user.put = (requestProperties, callBack) => {
 
 }
-handler.__user.delete = (requestProperties, callBack) => {
+handler._user.delete = (requestProperties, callBack) => {
 
 }
 
