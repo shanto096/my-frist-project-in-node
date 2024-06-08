@@ -91,7 +91,51 @@ handler._user.get = (requestProperties, callBack) => {
 
 
 handler._user.put = (requestProperties, callBack) => {
+    const firstName = typeof(requestProperties.body.firstName === 'string') && requestProperties.body.firstName.trim().length > 0 ? requestProperties.body.firstName : false
+    const lastName = typeof(requestProperties.body.lastName === 'string') && requestProperties.body.lastName.trim().length > 0 ? requestProperties.body.lastName : false
+    const phone = typeof(requestProperties.body.phone === 'string') && requestProperties.body.phone.trim().length > 0 ? requestProperties.body.phone : false
+    const passwords = typeof(requestProperties.body.passwords === 'string') && requestProperties.body.passwords.trim().length > 0 ? requestProperties.body.passwords : false
+    if (phone) {
+        if (firstName || lastName || passwords) {
+            lib.read('user', phone, (uData, err1) => {
+                const userData = {...jsonParse(uData) }
+                if (userData && !err1) {
+                    if (firstName) {
+                        userData.firstName = firstName
+                    }
+                    if (lastName) {
+                        userData.lastName = lastName
+                    }
+                    if (passwords) {
+                        userData.password = hash(passwords)
+                    }
 
+                    // store fs database.......
+                    lib.update('user', phone, userData, (err2) => {
+                        if (!err2) {
+                            callBack(200, {
+                                message: "updated user successful"
+                            })
+                        } else {
+                            callBack(500, {
+                                message: "there was problem in sever side "
+                            })
+                        }
+                    })
+
+                } else {
+                    callBack(400, {
+                        message: " you have problem in your request"
+                    })
+
+                }
+            })
+        } else {
+            callBack(500, {
+                message: 'problem in server side '
+            })
+        }
+    }
 }
 handler._user.delete = (requestProperties, callBack) => {
 
