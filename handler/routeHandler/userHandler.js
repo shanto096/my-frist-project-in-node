@@ -138,7 +138,33 @@ handler._user.put = (requestProperties, callBack) => {
     }
 }
 handler._user.delete = (requestProperties, callBack) => {
+    const phone = typeof(requestProperties.body.phone === 'string') && requestProperties.body.phone.trim().length > 0 ? requestProperties.body.phone : false
+    if (phone) {
+        lib.read('user', phone, (userData, err1) => {
+            if (!err1 && userData) {
+                lib.delete('user', phone, (err2) => {
+                    if (!err2) {
+                        callBack(200, {
+                            message: ' User was deleted successfully'
+                        })
+                    } else {
+                        callBack(500, {
+                            message: ' This is server side  error'
+                        })
+                    }
+                })
+            } else {
+                callBack(500, {
+                    message: 'This is server side error'
+                })
+            }
+        })
 
+    } else {
+        callBack(404, {
+            message: "there was a problem in your request "
+        })
+    }
 }
 
 module.exports = handler
